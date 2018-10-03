@@ -11,8 +11,7 @@ var maskedCorners: CACornerMask { get set }
 where `CACornerMask` is OptionSet
 
 ```swift
-struct CACornerMask : OptionSet {
-    
+struct CACornerMask : OptionSet {    
     public static var layerMinXMinYCorner: CACornerMask { get }
     public static var layerMaxXMinYCorner: CACornerMask { get }
     public static var layerMinXMaxYCorner: CACornerMask { get }
@@ -24,13 +23,13 @@ All we know that iOS coordinate system (UIKit) starts from top left corner
 
 <img src="system.png" width="50%" height="50%"/>
 
-here **CACornerMask** has the same idea, where `layerMinXMinYCorner` is top left corner and `layerMaxXMaxYCorner` bottom right corner as it's shown on image below
+here **CACornerMask** has the same idea, where `layerMinXMinYCorner` is top left corner and `layerMaxXMaxYCorner` is bottom right corner as it's shown on image below
 
 <img src="example.png" width="50%" height="50%"/>
 
 ### How to
 
-It's easy to:
+It's easy to use:
 
 - set corner radius value
 - set what corners you want to be rounded
