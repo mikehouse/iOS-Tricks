@@ -13,32 +13,30 @@ As we all know in objective-c all method calls done through runtime message disp
 Now let's talk about Swift's methods calls. Will talk about only pure Swift methods invocations, not where swift tightly coupled with objective-c as example via inheritance from NSObject because there begins working objective-c's message dispatch. Pure swift has two ways to call a method that is dynamic dispatch or static dispatch. Dynamic dispatch starts working when compiler do not exactly know what type of object for called method gone be used and the runtime will go through all inheritance tree to find needed method to call.
 
 ```swift
-
 // Instead of base class we can declare a protocol Animal, the effect will be the same.
 
 class Animal {
-	func sayName() {
-		print("I'm just Animal")
-	}
+    func sayName() {
+        print("I'm just Animal")
+    }
 }
 
 class Cat: Animal {
-	override func sayName() {
-		print("I'm a Cat!")
-	}
+    override func sayName() {
+        print("I'm a Cat!")
+    }
 }
 
 func examineAnimal(_ animal: Animal) {
 
-	/// Compiler might not know is there Animal object or its subclass, 
-	/// to find out the runtime will go through all inheritance tree to find needed method.
+    /// Compiler might not know is there Animal object or its subclass, 
+    /// to find out the runtime will go through all inheritance tree to find needed method.
 
-	animal.sayName()
+    animal.sayName()
 }
 
 examineAnimal(Animal()) // prints "I'm just Animal"
 examineAnimal(Cat()) // prints "I'm a Cat!"
-
 ```
 
 From code above you can see what means dynamic dispatch and it's a bit slow agains static dispatch. If we change the code to this
@@ -46,17 +44,16 @@ From code above you can see what means dynamic dispatch and it's a bit slow agai
 
 ```swift
 class Animal {
-	func sayName() {
-		print("I'm just Animal")
-	}
+    func sayName() {
+        print("I'm just Animal")
+    }
 }
 
 func examineAnimal(_ animal: Animal) {
-	animal.sayName()
+    animal.sayName()
 }
 
 examineAnimal(Animal())
-
 ```
 
 the compiler can determine that there are no any subclasses for Animal and can enable here static dispatch, but to do this the compiler have to analyze all your code base to be sure that there are no subclasses and this process can slow the compiler down.
@@ -67,17 +64,16 @@ When we are sure that there are no subclasses for some class we can help the com
 
 ```swift
 final class Animal {
-	func sayName() {
-		print("I'm just Animal")
-	}
+    func sayName() {
+        print("I'm just Animal")
+    }
 }
 
 func examineAnimal(_ animal: Animal) {
-	animal.sayName()
+    animal.sayName()
 }
 
 examineAnimal(Animal())
-
 ```
 
 See this magic word the compiler sure there no subclasses and will directly use object's and method's addresses to set them to the binary.
