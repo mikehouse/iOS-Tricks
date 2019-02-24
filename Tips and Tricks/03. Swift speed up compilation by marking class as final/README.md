@@ -10,7 +10,7 @@ Once I heard that if you mark your class as final that will reduce compile time 
 
 As we all know in objective-c all method calls done through runtime message dispatch - messages (selectors) are being send to objects at runtime. If object can respond to this message then method will be called else unrecognized selector runtime error will be thrown. Objective-C compiler knows almost nothing about code, it doesn't even know is object has being calling method or not. Because of this objective-c compiler do not produce highly efficient machine code as it doesn't know what is going on there. All this information begins available only in runtime and can be optimized at this time as actually objective-c does, for example cashes method calls and etc. That being said objective-c code not efficient as Swift one because of its nature and we can do nothing about this.
 
-Now let's talk about Swift's methods calls. Will talk about only pure Swift methods invocations, not where swift tightly coupled with objective-c as example via inheritance from NSObject because there begins working objective-c's message dispatch. Pure swift has two ways to call a method that is dynamic dispatch or static dispatch. Dynamic dispatch starts working when compiler do not exactly know what type of object for called method gone be used and the runtime will go through all inheritance tree to find needed method to call.
+Now let's talk about Swift's methods calls. Will talk about only pure Swift methods invocations, not where swift tightly coupled with objective-c as example via inheritance from NSObject because there begins working objective-c's message dispatch. Pure swift has two ways to call a method that is dynamic dispatch or static dispatch. Dynamic dispatch starts working when compiler does not exactly know what type of object for called method gone be used and the runtime will go through all inheritance tree to find needed method to call.
 
 ```swift
 // Instead of base class we can declare a protocol Animal, the effect will be the same.
@@ -29,8 +29,8 @@ class Cat: Animal {
 
 func examineAnimal(_ animal: Animal) {
 
-    /// Compiler might not know is there Animal object or its subclass, 
-    /// to find out the runtime will go through all inheritance tree to find needed method.
+    // Compiler might not know is there Animal object or its subclass, 
+    // to find out the runtime will go through all inheritance tree to find needed method.
 
     animal.sayName()
 }
@@ -56,7 +56,7 @@ func examineAnimal(_ animal: Animal) {
 examineAnimal(Animal())
 ```
 
-the compiler can determine that there are no any subclasses for Animal and can enable here static dispatch, but to do this the compiler have to analyze all your code base to be sure that there are no subclasses and this process can slow the compiler down.
+the compiler can determine that there are no any subclasses for Animal and can enable here static dispatch, but to do this the compiler has to analyze all your code base to be sure that there are no subclasses and this process can slow the compiler down.
 
 The static dispatch means that calling object is already known at compile time and there no needs to traverse all inheritance tree to find it. It is very fast method of calling because object and method memory addresses already set by compiler and the runtime only needs to use it without any additional work.
 
@@ -76,7 +76,7 @@ func examineAnimal(_ animal: Animal) {
 examineAnimal(Animal())
 ```
 
-See this magic word the compiler sure there no subclasses and will directly use object's and method's addresses to set them to the binary.
+Found this magic word the compiler sure there no subclasses and will directly use object's and method's addresses to set them to the binary.
 
 
 Okay, back to our project. The project has thousands of swift files, most of them are swift's structs and protocols. I've found about 650 classes, some of them have subclasses, but most of them (~600) do not and no one was marked as final. It took about 20 minutes to mark 600 classes as final (find/replace by rexep). Then I run a set of project builds to measure its time. Here are my results with final classes and without it.
