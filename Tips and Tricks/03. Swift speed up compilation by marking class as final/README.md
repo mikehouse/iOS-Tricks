@@ -91,6 +91,7 @@ Okay, back to our project. The project has thousands of swift files, most of the
 - All dependencies are excluded from build
 - XCAssets and Storyboards/Xibs are excluded from build
 - Build for only one active architecture (x86_64)
+- DEBUG build (as we use it mostly during development)
 
 Before every /Build I was deleting the directory _/Library/Developer/Xcode/DerivedData/my_project-hfwwsqmzzsigtuazoqlonulxiafe/Build/Intermediates.noindex/my_project.build/Debug-iphonesimulator/my_project.build/Objects-normal/x86_64_ to trigger only swift source recompilation of Xcode active target. The results are below.
 
