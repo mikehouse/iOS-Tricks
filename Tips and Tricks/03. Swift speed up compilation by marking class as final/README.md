@@ -8,7 +8,7 @@ As you may know the swift compiler analyses our code to produce very efficient m
 
 Once I heard that if you mark your class as final that will reduce compile time of this class and sometimes significantly. Oh yeah! But why? Let's talk about message dispatch mechanism or how the class's methods are actually called. 
 
-As we all know in objective-c all method calls done through runtime message dispatch - messages (selectors) are being send to objects at runtime. If object can respond to this message then method will be called else unrecognized selector runtime error will be thrown. Objective-C compiler knows almost nothing about code, it doesn't even know is object has being calling method or not. Because of this objective-c compiler do not produce highly efficient machine code as it doesn't know what is going on there. All this information begins available only in runtime and can be optimized at this time as actually objective-c does, for example cashes method calls and etc. That being said objective-c code not efficient as Swift one because of its nature and we can do nothing about this.
+As we all know in objective-c all method calls done through runtime message dispatch - messages (selectors) are being send to objects at runtime. If object can respond to this message then method will be called else unrecognized selector runtime error will be thrown. Objective-C compiler knows almost nothing about code, it doesn't even know is object has the being calling method or not. Because of this objective-c compiler do not produce highly efficient machine code as it doesn't know what is going on there. All this information begins available only in runtime and can be optimized at this time as actually objective-c does, for example cashes method poiters of vtable and etc. That being said objective-c code not efficient as Swift one because of its nature and we can do nothing about this.
 
 Now let's talk about Swift's methods calls. Will talk about only pure Swift methods invocations, not where swift tightly coupled with objective-c as example via inheritance from NSObject because there begins working objective-c's message dispatch. Pure swift has two ways to call a method that is dynamic dispatch or static dispatch. Dynamic dispatch starts working when compiler does not exactly know what type of object for called method gone be used and the runtime will go through all inheritance tree to find needed method to call.
 
@@ -103,7 +103,7 @@ Before every /Build I was deleting the directory _/Library/Developer/Xcode/Deriv
 | 106 seconds   | 121 seconds   |
 | 109 seconds   | 122 seconds   |
 
-As we can see to mark all classes as final we got 8%~10% time speed up. Cheers!
+As we can see marking all classes as final we got 8%~10% compilation time speed up. Cheers!
 
 
 
