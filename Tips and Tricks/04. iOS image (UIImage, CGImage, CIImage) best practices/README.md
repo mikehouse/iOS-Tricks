@@ -9,11 +9,11 @@ First of all let's check how this image we will bundle to our application and wh
 
 ### Adding image as application bundle resource
 
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 15.13.03.png" width="60%" height="60%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 15.13.03.png" width="100%" height="100%"/>
 
 When we do like this then the image will be copied inside the application bundle:
 
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 15.13.31.png" width="60%" height="60%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 15.13.31.png" width="70%" height="70%"/>
 
 and final application bundle size gonna be 6.6 mb :
 
@@ -100,7 +100,7 @@ Then check the memory
 
 Nothing has changed. Seems the problem is in Data object. Let's check is there a way to fix this. Go in Data's initializer documentation and see
 
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 16.07.50.png" width="80%" height="80%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 16.07.50.png" width="100%" height="100%"/>
 
 And these is nothing at all. Okay, will look at Data header at Foundation framework
 
@@ -115,11 +115,11 @@ And these is nothing at all. Okay, will look at Data header at Foundation framew
 
 It is something. We see that initializer has second parameter `options` of type `Data.ReadingOptions` that is OptionSet. The default value for initializer is empty that is []. Let's see what these options are. Finally there is something.
 
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 16.12.27.png" width="80%" height="80%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 16.12.27.png" width="100%" height="100%"/>
 
 Now will look at the values of this option set.
 
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 17.02.45.png" width="80%" height="80%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 17.02.45.png" width="100%" height="100%"/>
 
 Let's try with `uncached` and find out what it means.
 
@@ -236,11 +236,11 @@ this means that UIImage under hood also uses `Data` with `alwaysMapped`/`mappedI
 
 As you remember we put the image inside application bundle as resource file. Apple recommends store all images at an assets catalog. Let's see what we get when move the image from application bundle to assets catalog.
 
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 17.59.56.png" width="80%" height="80%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 17.59.56.png" width="100%" height="100%"/>
 
 Then build the project and check final application bundle
 
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 18.05.30.png" width="80%" height="80%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 18.05.30.png" width="100%" height="100%"/>
 
 We see that there is no `rocket.jpg` file anymore, but we got there `Assets.car` file, that bundles all asset's resources in itself. We can view its content via open source project [Asset Catalog Tinkerer](https://github.com/insidegui/AssetCatalogTinkerer). Check application bundle size
 
@@ -287,7 +287,7 @@ final class ViewController: UIViewController {
 
 I set `imageView` size to 320x480. 
 
-<img src="./Images/Screenshots/2/Screenshot 2020-03-08 at 20.06.00.png" width="50%" height="50%"/>
+<img src="./Images/Screenshots/2/Screenshot 2020-03-08 at 20.06.00.png" width="60%" height="60%"/>
 
 The result on screen
 
