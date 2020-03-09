@@ -1,27 +1,27 @@
 
-## Image (UIImage, CGImage, CIImage) efficient handling on iOS
+## Image (UIImage, CGImage, CIImage) efficient handling on iOS (best practices)
 
-In this tutorial we will check the ways to work with images on iOS and find the most efficient one. For testing we are gonna use high resolution image (taken from Flickr.com [Launch of Mars Explorer Rover-B](https://www.flickr.com/photos/nasacommons/19138397548/in/album-72157650353459778/) with its size 6.4 mb on hard drive.
+In this tutorial we will check the ways to work with images on iOS and find the most efficient one. For testing we are gonna use high resolution image (taken from [Flickr.com](https://Flickr.com) [Launch of Mars Explorer Rover-B](https://www.flickr.com/photos/nasacommons/19138397548/in/album-72157650353459778/) with its size 6.4 mb on hard drive and resolution 2023×3000 pixels.
 
-<img src="./Images/rocket.jpg" width="10%" height="10%"/>
+<img src="./Images/rocket.jpg" width="40%" height="40%"/>
 
 First of all let's check how this image we will bundle to our application and what we can do to make it better.
 
 ### Adding image as application bundle resource
 
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 15.13.03.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 15.13.03.png" width="60%" height="60%"/>
 
 When we do like this then the image will be copied inside the application bundle:
 
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 15.13.31.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 15.13.31.png" width="60%" height="60%"/>
 
 and final application bundle size gonna be 6.6 mb :
 
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 15.16.32.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 15.16.32.png" width="60%" height="60%"/>
 
 Run the application without any logic yet and check its memory consumption.
 
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 15.44.14.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 15.44.14.png" width="40%" height="40%"/>
 
 ### Find a better way to create UIImage from image file
 
@@ -47,9 +47,9 @@ final class ViewController: UIViewController {
 
 We just store the image to a property, there is no showing of it on UI yet. Let's look as application memory goes:
 
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 21.58.09.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 21.58.09.png" width="40%" height="40%"/>
 
-We can see the memory consumption increased by ~6.4 mb, that is the size of our image. And we don't show it yet on UI! Assume a server gave us an array of images and when we creating UIImage as above we will get a lot of ram memory usage even when images are not shown to a user yet. With code like this
+We can see the memory consumption increased by ~6.1 mb, that is the size of our image. And we don't show it yet on UI! Assume a server gave us an array of images and when we creating UIImage as above we will get a lot of ram memory usage even when images are not shown to a user yet. With code like this
 
 ```swift
 final class ViewController: UIViewController {
@@ -72,7 +72,7 @@ final class ViewController: UIViewController {
 
 the app memory will look like this
 
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 15.56.39.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 15.56.39.png" width="40%" height="40%"/>
 
 That is huge and there is no any business logic yet! Why is this happening ? Let's walk through the code and find a place from where the issue goes. 
 
@@ -96,11 +96,11 @@ final class ViewController: UIViewController {
 
 Then check the memory
 
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 15.56.39.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 15.56.39.png" width="40%" height="40%"/>
 
 Nothing has changed. Seems the problem is in Data object. Let's check is there a way to fix this. Go in Data's initializer documentation and see
 
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 16.07.50.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 16.07.50.png" width="80%" height="80%"/>
 
 And these is nothing at all. Okay, will look at Data header at Foundation framework
 
@@ -115,11 +115,11 @@ And these is nothing at all. Okay, will look at Data header at Foundation framew
 
 It is something. We see that initializer has second parameter `options` of type `Data.ReadingOptions` that is OptionSet. The default value for initializer is empty that is []. Let's see what these options are. Finally there is something.
 
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 16.12.27.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 16.12.27.png" width="80%" height="80%"/>
 
 Now will look at the values of this option set.
 
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 17.02.45.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 17.02.45.png" width="80%" height="80%"/>
 
 Let's try with `uncached` and find out what it means.
 
@@ -143,7 +143,7 @@ final class ViewController: UIViewController {
 
 And there are no changes, app still eats a lot of memory
 
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 15.56.39.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 15.56.39.png" width="40%" height="40%"/>
 
 One more try with `alwaysMapped` option.
 
@@ -167,7 +167,7 @@ final class ViewController: UIViewController {
 
 And look at the memory
 
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 17.09.22.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 17.09.22.png" width="40%" height="40%"/>
 
 the value is like the app has in idle state. What happened there ? Take a closer look at description of options.
 
@@ -206,7 +206,7 @@ final class ViewController: UIViewController {
 
 and finally we got what we wanted
  
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 17.39.47.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 17.39.47.png" width="40%" height="40%"/>
 
 Now let's get rid off `data` object as UIImage has initializer with URL path argument.
 
@@ -228,7 +228,7 @@ final class ViewController: UIViewController {
 
 with memory consumption
 
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 17.39.47.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 17.39.47.png" width="40%" height="40%"/>
 
 this means that UIImage under hood also uses `Data` with `alwaysMapped`/`mappedIfSafe` options or similar behaviour. Next takeaway is that creation of `UIImage` from `URL` costs nothing for memory.
 
@@ -236,15 +236,15 @@ this means that UIImage under hood also uses `Data` with `alwaysMapped`/`mappedI
 
 As you remember we put the image inside application bundle as resource file. Apple recommends store all images at an assets catalog. Let's see what we get when move the image from application bundle to assets catalog.
 
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 17.59.56.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 17.59.56.png" width="80%" height="80%"/>
 
 Then build the project and check final application bundle
 
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 18.05.30.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 18.05.30.png" width="80%" height="80%"/>
 
 We see that there is no `rocket.jpg` file anymore, but we got there `Assets.car` file, that bundles all asset's resources in itself. We can view its content via open source project [Asset Catalog Tinkerer](https://github.com/insidegui/AssetCatalogTinkerer). Check application bundle size
 
-<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 18.02.13.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/1/Screenshot 2020-03-08 at 18.02.13.png" width="50%" height="50%"/>
 
 and unfortunately there no changes, it still is 6.6 mb. We can conclude that using raster images (jpg, png, bmp, gif, etc.) for assets catalog has no significant benefits, but it still is recommended way and best practise to store images in application bundle. Seems there only are 2 ways to reduce application bundle size:
 
@@ -287,37 +287,37 @@ final class ViewController: UIViewController {
 
 I set `imageView` size to 320x480. 
 
-<img src="./Images/Screenshots/2/Screenshot 2020-03-08 at 20.06.00.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/2/Screenshot 2020-03-08 at 20.06.00.png" width="50%" height="50%"/>
 
 The result on screen
 
-<img src="./Images/Screenshots/2/Simulator Screen Shot - iPhone 11 - 2020-03-08 at 19.58.00.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/2/Simulator Screen Shot - iPhone 11 - 2020-03-08 at 19.58.00.png" width="40%" height="40%"/>
 
 Check memory consumption
 
-<img src="./Images/Screenshots/2/Screenshot 2020-03-08 at 20.04.07.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/2/Screenshot 2020-03-08 at 20.04.07.png" width="40%" height="40%"/>
 
 Let's change image view size to 100x100
  
-<img src="./Images/Screenshots/2/Simulator Screen Shot - iPhone 11 - 2020-03-08 at 20.10.19.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/2/Simulator Screen Shot - iPhone 11 - 2020-03-08 at 20.10.19.png" width="40%" height="40%"/>
  
 and check the memory one more time
 
-<img src="./Images/Screenshots/2/Screenshot 2020-03-08 at 20.04.07.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/2/Screenshot 2020-03-08 at 20.04.07.png" width="40%" height="40%"/>
 
 and it is the same! Change the size to full screen
 
-<img src="./Images/Screenshots/2/Simulator Screen Shot - iPhone 11 - 2020-03-08 at 20.12.04.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/2/Simulator Screen Shot - iPhone 11 - 2020-03-08 at 20.12.04.png" width="40%" height="40%"/>
 
 and memory consumption still remains the same!  
 
 <img src="./Images/Screenshots/2/Screenshot 2020-03-08 at 20.04.07.png" width="30%" height="30%"/>
 
-What is going on ? Let's do a math. Application idle state is ~27 mb, image size on the disk is 6.4 mb, so when we loaded the image to UIImageView the application memory consumption size should has been ~33.4 mb, but we got ~36.7 mb, that is the image now takes ~9.7 mb (~3.3 mb more (+34%)). To understand this we have to go back to our original image. As you remember it is `rocket.jpg`, seems the reason is a format of the file. Let's cite [Wikipedia](https://en.wikipedia.org/wiki/JPEG)
+What is going on ? Let's do a math. Application idle state is ~27.2 mb, image size on the disk is 6.4 mb, so when we loaded the image to UIImageView the application memory consumption size should has been ~33.6 mb, but we got ~36.7 mb, that is the image now takes ~9.5 mb (~3.1 mb more (+32%)). To understand this we have to go back to our original image. As you remember it is `rocket.jpg`, seems the reason is a format of the file. Let's cite [Wikipedia](https://en.wikipedia.org/wiki/JPEG)
 
 > JPEG is a commonly used method of lossy compression for digital images.
 
-As this image is compressed then before showing it UIImageView must decompress it to restore image's original state. That is why we got more memory consumption than we expected (~36.7 mb instead of ~33.4 mb). I think you also has a question on your mind as it is in mine - can we know how much an image will take memory after decompression ? Let's find out. Before measurements make helper byte counter formatter
+As this image is compressed then before showing it UIImageView must decompress it to restore image's original state. That is why we got more memory consumption than we expected (~36.7 mb instead of ~33.6 mb). I think you also has a question on your mind as it is in mine - can we know how much an image will take memory after decompression ? Let's find out. Before measurements make helper byte counter formatter
 
 ```swift
 let byteCounter = ByteCountFormatter()
@@ -334,19 +334,19 @@ let cgImage = image.cgImage!
 byteCounter.string(fromByteCount: Int64(cgImage.bytesPerRow * cgImage.height))
 ```
 
-gives us `24,3 MB` result, that seems isn't what we expect, we expect ~9.7 mb. We used `cgImage.height` that is image's height in pixels, as we know iPhone screen uses pixel per point value, may be if use this instead of pixels we will get right result.  
+gives us `24,3 MB` result, that seems isn't what we expect, we expect ~9.5 mb. We used `cgImage.height` that is image's height in pixels, as we know iPhone screen uses pixel per point value, may be if use this instead of pixels we will get right result.  
 
 ```swift
 byteCounter.string(fromByteCount: Int64(cgImage.bytesPerRow * cgImage.height / Int(UIScreen.main.scale)))
 ```
 
-we getting `12,1 mb` that is a bit closer to our math `9.7 mb`, but still not the same. Answers from [stackoverflow.com](https://stackoverflow.com/a/9076993/3614746) suggest to use `UIImage.jpegData(compressionQuality:)` method. Let's check it out
+we getting `12,1 mb` that is a bit closer to our math `9.5 mb`, but still not the same. Answers from [stackoverflow.com](https://stackoverflow.com/a/9076993/3614746) suggest to use `UIImage.jpegData(compressionQuality:)` method. Let's check it out
 
 ```swift
 byteCounter.string(fromByteCount: Int64(image.jpegData(compressionQuality: 1)!.count))
 ```
 
-and the result is `~9,3 mb`, seems what we wanted. What we can say after this is the size of UIImageView does nothing with image memory footprint, even if change size of UIImageVew to 10x10 pt the image still will consume its full uncompressed size. Also image size on disk and rendered on a screen is not the same because the image file on disk is in compressed state, UI have to decopress it to display it first.
+and the result is `~9,3 mb`, seems what we wanted. What we can say after this is the size of UIImageView does nothing with image memory footprint, even if change size of UIImageVew to 10x10 pt the image still will consume its full uncompressed size. Also image sizes on disk and rendered on a screen are not the same because the image file on disk is in compressed state, UI have to decopress it to display it first.
 
 Okay, we have only one image that consumes 9 mb of memory - not a big deal. But what will occur if we have UICollectionView with a lot of small cells with images in it ? It will consume a lot of memory be sure. Even Apple has spoken about this issue at its [WWDC 2018](https://developer.apple.com/videos/play/wwdc2018/219/) conference. What Apple recommends is to use image downsampling technic. They even provided a source code for
 
@@ -389,7 +389,7 @@ final class ViewController: UIViewController {
 
 And after this the memory consumption reduced to 27.8 mb
 
-<img src="./Images/Screenshots/2/Screenshot 2020-03-08 at 23.14.54.png" width="30%" height="30%"/>
+<img src="./Images/Screenshots/2/Screenshot 2020-03-08 at 23.14.54.png" width="40%" height="40%"/>
 
 Check decompressed size of new downsampled image
 
