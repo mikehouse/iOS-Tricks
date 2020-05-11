@@ -1,4 +1,4 @@
-C and Swift basics.
+# C and Swift basics.
 
 As you may know it is possible to work with c source code from Swift almost out of box. To make it work you only need to add to iOS project bridging header file where you put the imports of c header files that you want to work with. Xcode will scan this file and generate modeulemap file(s) from imported headers that Swift can work with. `modeulemap` itself is binary file and you cannot see what is there from any text editor, but if you want this you can use `swift-ide-test` tool from Swift toolchanin, here is some info about https://forums.swift.org/t/whats-in-the-file-of-swiftmodule-how-to-open-it/1032.
 
@@ -101,7 +101,7 @@ let string: UnsafePointer<Int8>! = getImmutableStringFromC()
 let str = String(cString: string)
 ```
 
-### Memory management.
+## Memory management.
 
 As you've seen from examle above we used in c function constant string:
 
@@ -136,7 +136,7 @@ or we can use built-in c function to free a memory
 free(UnsafeMutableRawPointer(OpaquePointer(string)))
 ```
 
-### Get a string from c by passing string pointer from Swift.
+## Get a string from c by passing string pointer from Swift.
 
 If you are familia with c standard library you've seen that a lot of functions being working with strings take a pointer to a string and fill that pointer with characters:
 
@@ -175,7 +175,7 @@ print(str) // prints "999"
 buf.deallocate() // free allocated buffer.
 ```
 
-### Simple example how to pass a string from Swift to c.
+## Simple example how to pass a string from Swift to c.
 
 Assume we have c function like this:
 
@@ -194,7 +194,7 @@ string.withCString { (p: UnsafePointer<Int8>) -> Void in
 }
 ```
 
-### C structs from Swift.
+## C structs from Swift.
 
 Let's define c struct:
 
@@ -223,6 +223,6 @@ let name = String(cString: UnsafePointer<Int8>(OpaquePointer(u.name)))
 print(name) // prints "Jay Z"
 ```
 
-### Final thoughts.
+## Final thoughts.
 
 We've seen that using c API from Swift not so hard how it sounds. All Swift wrappers around pointers to a memory have names Unsafe[Mutable][Raw][Buffer]Pointer. Also as c doesn't have ARC and you allocate a memory then you must release it after using.
