@@ -8,5 +8,7 @@
 
 [04. iOS image (UIImage, CGImage, CIImage) best practices](./Tips%20and%20Tricks/04.%20iOS%20image%20(UIImage,%20CGImage,%20CIImage)%20best%20practices/README.md)
 
+[05. C and Swift basics](./Tips%20and%20Tricks/05.%20C%20and%20Swift%20basics/README.md)
+
 ---
 
