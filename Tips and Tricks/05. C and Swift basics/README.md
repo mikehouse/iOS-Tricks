@@ -1,6 +1,6 @@
 # C and Swift basics.
 
-As you may know it is possible to work with c source code from Swift almost out of box. To make it work you only need to add to iOS project bridging header file where you put the imports of c header files that you want to work with. Xcode will scan this file and generate modeulemap file(s) from imported headers that Swift can work with. `modeulemap` itself is binary file and you cannot see what is there from any text editor, but if you want this you can use `swift-ide-test` tool from Swift toolchanin, here is some info about https://forums.swift.org/t/whats-in-the-file-of-swiftmodule-how-to-open-it/1032.
+As you may know it is possible to work with c source code from Swift almost out of box. To make it work you only need to add to iOS project bridging header file where you put the imports of c header files that you want to work with. Xcode will scan this file and generate modeulemap file(s) from imported headers that Swift can work with. `modulemap` itself is binary file and you cannot see what is there from any text editor, but if you want this you can use `swift-ide-test` tool from Swift toolchanin, here is some info about https://forums.swift.org/t/whats-in-the-file-of-swiftmodule-how-to-open-it/1032.
 
 Okay, let's see how we can call simpliest c function from Swift. For this we create `inter-op.h` and `inter-op.c` files in our Xcode application target. In header file declare function:
 
