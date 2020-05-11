@@ -25,7 +25,7 @@ Then we import c header file in projtect's bridging header file as:
 
 Here is screenshot how it looks like.
 
-<img src="001.png" width="90%" height="90%"/>
+<img src="001.png"/>
 
 Now build the project and call this function from Swift. As this function defined via bridging header then it is available from any place in Swift and there no need to import it explicitly. In Swift we get this:
 
